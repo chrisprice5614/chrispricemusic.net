@@ -1,0 +1,33 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <title>Check Your Email!</title>
+</head>
+<body>
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <h1>Check your mail!</h1>
+            <p>We've just sent an email to <%= passEmail%>! Check your spam if you don't see it!</p>
+        </div>
+
+        <div><!--Deadspace--></div>
+        <!--Right-->
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+    </main>
+    <%- include("includes/footer") %>
+</body>
+</html>

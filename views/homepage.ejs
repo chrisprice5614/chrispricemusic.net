@@ -1,0 +1,271 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chris Price Music</title>
+</head>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const items = document.querySelectorAll('.carousel-item');
+        let maxHeight = 0;
+
+    function getTallest() {
+        
+
+        // Temporarily make all items visible to measure height
+        items.forEach(item => {
+            item.style.display = 'block';
+
+        });
+
+        // Measure the tallest
+        items.forEach(item => {
+            let height = item.offsetHeight;
+            if (height > maxHeight) {
+                maxHeight = height;
+            }
+        });
+
+        let i;
+        let slides = document.getElementsByClassName("carousel-item");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+    }
+
+    getTallest()
+
+    window.addEventListener("resize", function() {
+        getTallest()
+    });
+
+    
+
+        let slideIndex = 1;
+        const slideTime = 6000;
+        showSlides(slideIndex);
+
+        // Next/previous controls
+        function plusSlides(n) {
+            clearTimeout(slideTimeout);
+            showSlides(slideIndex += n);
+            slideTimeout = setTimeout(autoSlide, 6000); // 🔁 Restart it fresh
+        }
+
+        // Thumbnail image controls
+        function currentSlide(n) {
+        showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("carousel-item");
+        if (n > slides.length) {slideIndex = 1}
+        if (n < 1) {slideIndex = slides.length}
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+
+        slides[slideIndex-1].style.display = "block";
+        slides[slideIndex-1].style.height = maxHeight+"px"
+
+        }
+
+        window.plusSlides = plusSlides;
+        window.currentSlide = currentSlide;
+
+        function autoSlide() {
+        let i;
+        let slides = document.getElementsByClassName("carousel-item");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        slides[slideIndex-1].style.display = "block";
+        slides[slideIndex-1].style.height = maxHeight+"px"
+        slideTimeout = setTimeout(autoSlide, 6000); // Change image every 2 seconds
+        }
+
+        autoSlide();
+    })
+</script>
+<body>
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <br>
+            <h1 style="text-align: center;">Find Your Next Performance Piece</h1>
+            <p style="text-align: center;">Browse high-quality sheet music for any occasion!</p>
+            <br>
+            <hr>
+            <br>
+            
+            <form action="/music">
+                <div><ion-icon name="search-outline"></ion-icon>Search Music</div>
+                <div class="home-search">
+                    
+                    <input type="text" name="searchPiece" id="searchPiece" placeholder="Search music">
+                    <button>Search</button>
+                </div>
+            </form>
+
+            <br>
+            <h2>Featured Music</h2>
+            <p>Check out these featured pieces, handpicked by our team!</p>
+            <br>
+
+            <div class="featured-grid">
+                <div class="carousel-container">
+                    <button class="carousel-btn prev" onclick="plusSlides(-1)">&#10094;</button>
+                    
+                    <div class="carousel-track" id="carouselTrack">
+                        <div class="card carousel-hover">
+                            <% featuredMusic.forEach(piece => { %>
+                                <a href="/music/<%= piece.id %>" class="carousel-anchor">
+                                    <div class="carousel-item">
+                                        <img src="img/<%= piece.img %>" alt="<%= piece.title %> cover"  class="carousel-img">
+                                        <h3><%= piece.title %></h3>
+                                        <p class="carousel-link"><%= piece.composer %><% if (piece.arranger) { %> (arr. <%= piece.arranger %>)<% } %></p>
+                                        <p class="carousel-link">Grade <%= piece.difficulty %> | <%= piece.ensembletype %></p>
+                                    </div>
+                                </a>
+                            <% }) %>
+                        </div>
+
+                    </div>
+                
+                    <button class="carousel-btn next" onclick="plusSlides(1)">&#10095;</button>
+                </div>
+                <div>
+                    <% 
+                        let i = 0;
+                        featuredMusic.forEach(piece => { 
+                            i++
+                            
+                            if(i<=3) { %>
+                        <a href="/music/<%=piece.id%>" class="carousel-anchor">
+                            <div class="card carousel-hover">
+                                <div class="profile-piece">
+                                    <img src="/img/<%= piece.img %>" alt="Thumbnail for <%= piece.title %>" style="width: 100%; aspect-ratio: 1 ;">
+                                        <div>
+                                        <div class="piece-header">
+                                            <h3><%= piece.title %></h3>
+                                            <br>
+                                            <span class="carousel-link"><%= piece.composer %><% if (piece.arranger) { %> (arr. <%= piece.arranger %>)<% } %></span>
+                                        </div>
+                                        <div>
+                                            <span style="text-decoration: none;">For <%= piece.ensembletype %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    <% }}) %>
+                </div>
+            </div>
+            <br>
+            <h2>New Arrivals</h2>
+            <p>Looking for something new? Check out these new arrivals, hot off the press!</p>
+            <br>
+            <div>
+                <div class="duple-to-single">
+                    <% newMusic.forEach(piece => { %>
+                        <a href="/music/<%=piece.id%>" class="carousel-anchor">
+                            <div class="card carousel-hover" style="height: 95%;">
+                                <div class="profile-piece">
+                                    <img src="/img/<%= piece.img %>" alt="Thumbnail for <%= piece.title %>" style="width: 100%; aspect-ratio: 1 ;">
+                                        <div>
+                                        <div class="piece-header">
+                                            <h3><%= piece.title %></h3>
+                                            <br>
+                                            <span class="carousel-link"><%= piece.composer %><% if (piece.arranger) { %> (arr. <%= piece.arranger %>)<% } %></span>
+                                        </div>
+                                        <div>
+                                            <span style="text-decoration: none;">For <%= piece.ensembletype %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    <% }) %>
+                </div>
+            </div>
+            <br>
+            <br>
+            <h2>Search by Difficulty</h2>
+            <p>Choose a grade that's perfect for your ensemble!</p>
+            <br>
+            <br>
+            <div class="seven-to-one">
+                <% for(i = 0; i < 7; i++) { %>
+                    <div class="difficulty-list">
+                        <a href="/music?difficulty=<%= i+1 %>" class="button">Grade <%= i+1 %></a>
+                    </div>
+                <% } %>
+            </div>
+            <br>
+            <br>
+            <% if(soloPiano.length > 0) { %>
+            <h2>At The Piano</h2>
+            <p>Check out our selection of sheet music for solo piano!</p>
+            <div>
+                <div class="duple-to-single">
+                    <% soloPiano.forEach(piece => { %>
+                        <a href="/music/<%=piece.id%>" class="carousel-anchor">
+                            <div class="card carousel-hover" style="height: 95%;">
+                                <div class="profile-piece">
+                                    <img src="/img/<%= piece.img %>" alt="Thumbnail for <%= piece.title %>" style="width: 100%; aspect-ratio: 1 ;">
+                                        <div>
+                                        <div class="piece-header">
+                                            <h3><%= piece.title %></h3>
+                                            <br>
+                                            <span class="carousel-link"><%= piece.composer %><% if (piece.arranger) { %> (arr. <%= piece.arranger %>)<% } %></span>
+                                        </div>
+                                        <div>
+                                            <span style="text-decoration: none;">For <%= piece.ensembletype %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    <% }) %>
+                </div>
+            </div>
+            <br>
+            <br>
+            <% } %>
+            <br>
+            <h1 style="text-align: center;">Get Published by Us!</h1>
+            <br>
+            <p>Submit your music to see if you get approved to be published by Chris Price Music! We're always looking for new composers/arrangers who are wanting to get their music out there! Apply today!</p>
+            <br>
+            <br>
+            <div style="text-align: center;">
+                <a href="/apply" class="pdf-button"><ion-icon name="reader-outline"></ion-icon> Apply for Publication</a>
+            </div>
+            <br>
+            <br>
+        </div>
+        
+
+        <div><!--Deadspace--></div>
+        <!--Right-->
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+    </main>
+    <%- include("includes/footer") %>
+</body>
+</html>

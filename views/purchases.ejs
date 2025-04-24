@@ -1,0 +1,149 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <title>Your Library</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) { 
+            var scrollpos = localStorage.getItem('scrollpos');
+            if (scrollpos) window.scrollTo(0, scrollpos);
+        });
+
+        window.onbeforeunload = function(e) {
+            localStorage.setItem('scrollpos', window.scrollY);
+        };
+    </script>
+</head>
+<body>
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <h1>Your library <ion-icon name="book-outline"></ion-icon></h1>
+            <hr>
+           
+            <form action="/purchases" method="post">
+                <fieldset>
+                    <h3 style="margin-left: 8px">Search Library</h3>
+                    <hr style="width: 95%;">
+                    <div class="duple-grid-res">
+                        <div>
+                            <label for="title" style="font-size: small;">Search title/artist/arranger</label>
+                            <input type="text" id="title" name="title" autocomplete="off" value="<%= searchPiece %>">
+                        </div>
+                        <div>
+                            <label for="ensemble" style="font-size: small;">Ensemble Type</label>
+                            <select name="ensemble" id="ensemble">
+                                <option value="Any Ensemble" <% if(searchEnsemble == "Any Ensemble") { %> selected <% } %>>Any Ensemble</option>
+                                <option value="Wind Ensemble/Concert Band" <% if(searchEnsemble == "Wind Ensemble/Concert Band") { %> selected <% } %>>Wind Ensemble/Concert Band</option>
+                                <option value="String Ensemble" <% if(searchEnsemble == "String Ensemble") { %> selected <% } %>>String Ensemble</option>
+                                <option value="Marching Band" <% if(searchEnsemble == "Marching Band") { %> selected <% } %>>Marching Band</option>
+                                <option value="Jazz Band" <% if(searchEnsemble == "Jazz Band") { %> selected <% } %>>Jazz Band</option>
+                                <option value="Jazz Combo" <% if(searchEnsemble == "Jazz Combo") { %> selected <% } %>>Jazz Combo</option>
+                                <option value="Full Orchestra" <% if(searchEnsemble == "Full Orchestra") { %> selected <% } %>>Full Orchestra</option>
+                                <option value="Small Ensemble" <% if(searchEnsemble == "Small Ensemble") { %> selected <% } %>>Small Ensemble</option>
+                                <option value="Choir" <% if(searchEnsemble == "Choir") { %> selected <% } %>>Choir</option>
+                                <option value="Jazz Choir" <% if(searchEnsemble == "Jazz Choir") { %> selected <% } %>>Jazz Choir</option>
+                                <option value="Percussion" <% if(searchEnsemble == "Percussion") { %> selected <% } %>>Percussion</option>
+                                <option value="Solo Piano" <% if(searchEnsemble == "Solo Piano") { %> selected <% } %>>Solo Piano</option>
+                            </select>
+                        </div>
+                        <div style="text-align: left;">
+                            <button>Search <ion-icon name="search-outline"></ion-icon></button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+            <br>
+            <div class="pagination">
+                <div>
+                    <% if (currentPage > 1) { %>
+                    <a href="/purchases?page=<%= currentPage - 1 %>&searchPiece=<%= searchPiece %>&searchEnsemble=<%= searchEnsemble %>">Previous</a>
+                    <% } %>
+                </div>
+              
+                <div>
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                    <a href="/purchases?page=<%= i %>&searchPiece=<%= searchPiece %>&searchEnsemble=<%= searchEnsemble %>" 
+                        class="<%= i === currentPage ? 'active' : '' %>">
+                        <%= i %>
+                    </a>
+                    <% } %>
+                </div>
+              
+                <div style="text-align: right;">
+                    <% if (currentPage < totalPages) { %>
+                    <a href="/purchases?page=<%= currentPage + 1 %>&searchPiece=<%= searchPiece %>&searchEnsemble=<%= searchEnsemble %>" >Next</a>
+                    <% } %>
+                </div>
+            </div>
+            <br>
+            <% if(pieces.length != 0) { %>
+            <div class="purchase-grid">
+                <% pieces.forEach(piece => { %>
+                    <a href="/music/<%= piece.id %>">
+                    <div class="card">
+                        <h3 style="text-align: center;"><%= piece.title %></h3>
+                        <div style="text-align: center;">
+                            <br>
+                            <img src="/img/<%= piece.img %>" alt="Tumbnail for <%= piece.title %>" class="purchase-thumb">
+                            <br>
+                        </div>
+                        <br>
+                        <div><%= piece.composer %></div>
+                        <% if(piece.arranger != "") { %> <div>Arr (<%= piece.arranger %>)</div> <% } %>
+                        <small><%= piece.ensembletype %></small><br>
+                        <small>Grade: <%= piece.difficulty %></small>
+                        <br>
+                    </div>
+                    </a>
+                <% })%>
+            </div>
+            <% } else { %>
+            <p>No purchases yet... let's browse the <a href="/music">music catalogue</a></p>
+            <% } %>
+            <br>
+            <br>
+            <div class="pagination">
+                <div>
+                    <% if (currentPage > 1) { %>
+                    <a href="/purchases?page=<%= currentPage - 1 %>&searchPiece=<%= searchPiece %>&searchEnsemble=<%= searchEnsemble %>">Previous</a>
+                    <% } %>
+                </div>
+              
+                <div>
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                    <a href="/purchases?page=<%= i %>&searchPiece=<%= searchPiece %>&searchEnsemble=<%= searchEnsemble %>" 
+                        class="<%= i === currentPage ? 'active' : '' %>">
+                        <%= i %>
+                    </a>
+                    <% } %>
+                </div>
+              
+                <div style="text-align: right;">
+                    <% if (currentPage < totalPages) { %>
+                    <a href="/purchases?page=<%= currentPage + 1 %>&searchPiece=<%= searchPiece %>&searchEnsemble=<%= searchEnsemble %>" >Next</a>
+                    <% } %>
+                </div>
+            </div>
+            <br>
+        </div>
+
+        <div><!--Deadspace--></div>
+        <!--Right-->
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+    </main>
+    <%- include("includes/footer") %>
+</body>
+</html>

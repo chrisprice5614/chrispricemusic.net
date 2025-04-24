@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <title>Edit Music</title>
+</head>
+<body>
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <br>
+            <form action="/edit-music" method="POST">
+                <label for="search_user">Search</label>
+                <input type="text" name="searchMusic" id="searchMusic" value="<%= searchMusic %>">
+                <button>Search</button>
+            </form>
+            <br>
+            <% if(searchMusic != "") { %>
+            <a href="/edit-music" class="button">X <%= searchMusic %></a>
+            <% } %>
+            <br>
+
+            <div class="pagination">
+                <div>
+                    <% if (currentPage > 1) { %>
+                    <a href="/edit-music?page=<%= currentPage - 1 %>&searchMusic=<%= searchMusic %>">Previous</a>
+                    <% } %>
+                </div>
+              
+                <div>
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                    <a href="/edit-music?page=<%= i %>&searchMusic=<%= searchMusic %>" 
+                        class="<%= i === currentPage ? 'active' : '' %>">
+                        <%= i %>
+                    </a>
+                    <% } %>
+                </div>
+              
+                <div style="text-align: right;">
+                    <% if (currentPage < totalPages) { %>
+                    <a href="/edit-music?page=<%= currentPage + 1 %>&searchMusic=<%= searchMusic %>" >Next</a>
+                    <% } %>
+                </div>
+            </div>
+
+            <% pieces.forEach(piece => { %>
+                <div class="card">
+                    <div class="edit-pieces-grid">
+                        <div>
+                            <img src="/img/<%= piece.img %>" style="width: 100%; height: auto; aspect-ratio: 1;" alt="Thumbail for <%= piece.title %>">
+                        </div>
+                        <div>
+                            <div class="music-grid">
+                                <a href="/music/<%= piece.id %>"><h2><%= piece.title %></h2></a>
+                                <h2 style="text-align: right;">$<%= piece.cost %></h2>
+                            </div>
+                            <div class="music-grid">
+                                <div>
+                                    <p><%= piece.composer %></p>
+                                    <p><%= piece.arranger %></p>
+                                    <% if(owner) { %>
+                                        <p><%= piece.author %></p>
+                                    <% } %>
+                                </div>
+                                <div>
+                                    <p style="text-align: right;"><%= piece.ensembletype %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% if(piece.approved == false) { %>
+                        <div class="notice">Not approved yet</div>
+                    <% } %>
+                    <br>
+                    <a href="/edit-music/<%= piece.id %>" class="button">Edit</a>
+                </div>
+            <% }) %>
+            <br>
+            <div class="pagination">
+                <div>
+                    <% if (currentPage > 1) { %>
+                    <a href="/edit-music?page=<%= currentPage - 1 %>&searchMusic=<%= searchMusic %>">Previous</a>
+                    <% } %>
+                </div>
+              
+                <div>
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                    <a href="/edit-music?page=<%= i %>&searchMusic=<%= searchMusic %>" 
+                        class="<%= i === currentPage ? 'active' : '' %>">
+                        <%= i %>
+                    </a>
+                    <% } %>
+                </div>
+              
+                <div style="text-align: right;">
+                    <% if (currentPage < totalPages) { %>
+                    <a href="/edit-music?page=<%= currentPage + 1 %>&searchMusic=<%= searchMusic %>" >Next</a>
+                    <% } %>
+                </div>
+              </div>
+        </div>
+
+        <div><!--Deadspace--></div>
+        <!--Right-->
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+    </main>
+    <%- include("includes/footer") %>
+</body>
+</html>

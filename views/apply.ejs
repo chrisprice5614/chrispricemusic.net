@@ -1,0 +1,54 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <title>Chris Price Music</title>
+</head>
+<body>
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <h1 style="text-align: center;">Apply for Publication</h1>
+            <br>
+            <p>We're always looking for more composers and arrangers to publish! We take pride in providing high-quality music. As a writer for Chris Price Music, you're expected to know how to format sheet music in a readable manner, combine scores and parts into a single file, upload recordings to YouTube, create high-quality renderings or recordings, have sufficient technological literacy, and accept constructive criticism in a mature and professional way.</p>
+            <br>
+            <p>Chris Price Music believes in non-exclusivity, allowing you to publish your works here as well as with other sites. We believe composers and arrangers should be paid for their work, with us as the publishers only taking 10%.</p>
+            <br>
+            <form action="/apply" method="POST">
+                <label for="name">Your Name (First and Last)</label>
+                <input type="text" name="name" id="name" required>
+                <br>
+                <label for="email">Your Email</label>
+                <input type="email" name="email" id="email" required>
+                <br>
+                <label for="portfolio">Portfolio Link (Please include a high quality PDF of the score and parts <b>AND</b> an audio file)</label>
+                <input type="text" name="portfolio" id="portfolio" required>
+                <br>
+                <label for="content">Tell Us About Yourself</label>
+                <textarea name="content" id="content" required></textarea>
+                <br>
+                <button>Send</button>
+                <br>
+            </form>
+            <br>
+        </div>
+
+        <div><!--Deadspace--></div>
+        <!--Right-->
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+    </main>
+    <%- include("includes/footer") %>
+</body>
+</html>

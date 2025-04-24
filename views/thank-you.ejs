@@ -1,0 +1,39 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <title>Thank You</title>
+</head>
+<body>
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <h1>Thank you for your purchase!</h1>
+            <p>Links have been sent to the email you provided!</p>
+            <br>
+            <p>From here you can download the PDF files of your purchased music. Please use the links emailed to you to download these files in the future.</p>
+            <% links.forEach( link => { %>
+                <h2><%= link.title %></h2>
+                <p>Download: <a href="https://chrispricemusic.net/itemdownload/<%= link.url %>">https://chrispricemusic.net/itemdownload/<%= link.url %></a></p>
+            <% }) %>
+        </div>
+
+        <div><!--Deadspace--></div>
+        <!--Right-->
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+    </main>
+    <%- include("includes/footer") %>
+</body>
+</html>

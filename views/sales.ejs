@@ -1,0 +1,336 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <title>Your Sales</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+</head>
+<body>
+
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <h1>Your sales</h1>
+            <br>
+            <% const month = new Date().toLocaleString('default', { month: 'long' }); %>
+            <h2 style="margin: 16px;"><%= month %> <%= new Date().getFullYear() %></h2>
+            
+            <div class="sales-box">
+                <div class="sales-bar">
+                    <div class="sales-grid">
+                        <p style="text-decoration: underline;">Title</p>
+                        <p style="text-decoration: underline;">Sales</p>
+                        <p style="text-decoration: underline;">Revenue</p>
+                    </div>
+                </div>
+                <% 
+                
+
+
+                    function getDaysBetweenDates(date1, date2) {
+                    const startDate = new Date(date1);
+                    const endDate = new Date(date2);
+
+                    const diffInMs = Math.abs(endDate - startDate);
+                    const days = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+
+                    return days;
+                    }
+
+                    function daysAway(date1,date2) {
+                    const inputDate = new Date(date1);
+                    const now = new Date(date2);
+
+                    const timeDifference = inputDate.getTime() - now.getTime();
+                    const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+                    return daysDifference;
+                    }
+
+                    let totalRevenue = 0;
+                    let totalSales = 0;
+                    let salesGraph = new Array(getDaysBetweenDates(new Date(dateStart), new Date(dateEnd))).fill(0);
+                    let revenueGraph = new Array(getDaysBetweenDates(new Date(dateStart), new Date(dateEnd))).fill(0);
+                    
+
+                    music.forEach(piece => { 
+                    let sales = 0;
+                    let revenue = 0;
+
+                    if((piece.sales != null)&&(piece.sales != "[]"))
+                    {
+                        let saleArray = JSON.parse(piece.sales)
+
+                        
+
+                        saleArray.forEach(sale => {
+                            let saleDate = new Date(sale)
+                            let date1 = new Date(dateStart)
+                            let date2 = new Date(dateEnd)
+                            
+                            if((saleDate > date1)&&(saleDate < date2))
+                            {
+                                sales++;
+                                totalSales++;
+                                revenue += Number(piece.cost)*multiplier;
+                                salesGraph[getDaysBetweenDates(date1,saleDate)-1]++;
+                                revenueGraph[getDaysBetweenDates(date1,saleDate)-1]+= Number(piece.cost)*multiplier;
+
+
+                            }
+
+                        })
+                    }
+
+                    totalRevenue += revenue;
+                    %>
+                    
+                    <div class="sales-bar">
+                        <div class="sales-grid">
+                            <p><%= piece.title %></p>
+                            <p><%= sales %></p>
+                            <p>$<%= revenue.toFixed(2) %></p>
+                        </div>
+                    </div>
+                <% }) %>
+                <div class="sales-bar">
+                    <hr>
+                        <div class="sales-grid">
+                            <p><b>Total:</b></p>
+                            <p><b><%= totalSales %></b></p>
+                            <p><b>$<%= totalRevenue.toFixed(2) %></b></p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 8px">
+                        <small>*Payment may be slightly less due to paypal/stripe fees. Payments will be made out via paypal or check between the 1st and 3rd of the month. Please <a href="/contact">contact us</a> for questions.</small>
+                    </div>
+            </div>
+            <% if(allMusic.length > 0) { %>
+                <h2 style="margin: 16px;">Sales cut</h2>
+                <div class="sales-box">
+                <div class="sales-bar">
+                    <div class="sales-grid">
+                        <p style="text-decoration: underline;">Title</p>
+                        <p style="text-decoration: underline;">Sales</p>
+                        <p style="text-decoration: underline;">Revenue</p>
+                    </div>
+                </div>
+                <% 
+
+
+                    let totalRevenue = 0;
+                    let totalSales = 0;
+
+                    allMusic.forEach(piece => { 
+                    let sales = 0;
+                    let revenue = 0;
+
+                    if((piece.sales != null)&&(piece.sales != "[]"))
+                    {
+                        let saleArray = JSON.parse(piece.sales)
+
+                        
+
+                        saleArray.forEach(sale => {
+                            let saleDate = new Date(sale)
+                            let date1 = new Date(dateStart)
+                            let date2 = new Date(dateEnd)
+                            
+                            if((saleDate > date1)&&(saleDate < date2))
+                            {
+                                sales++;
+                                totalSales++;
+                                revenue += Number(piece.cost)*0.1;
+                                revenueGraph[getDaysBetweenDates(date1,saleDate)-1]+= Number(piece.cost)*0.1;
+                            }
+
+                        })
+                    }
+
+                    totalRevenue += revenue;
+                    %>
+                    
+                    <div class="sales-bar">
+                        <div class="sales-grid">
+                            <p><%= piece.title %></p>
+                            <p><%= sales %></p>
+                            <p>$<%= revenue.toFixed(2) %></p>
+                        </div>
+                    </div>
+                <% })
+                
+                date = new Date()%>
+                <div class="sales-bar">
+                    <hr>
+                        <div class="sales-grid">
+                            <p><b>Total:</b></p>
+                            <p><b><%= totalSales %></b></p>
+                            <p><b>$<%= totalRevenue.toFixed(2) %>*</b></p>
+                        </div>
+                </div>
+                
+            </div>
+            <br>
+
+            <div style="background-color: fff;">
+                <canvas id="myChart" style="width:100%;"></canvas>
+            </div>
+            <br>
+            <div style="background-color: fff;">
+                <canvas id="revenueChart" style="width:100%; " ></canvas>
+            </div>
+            <br>
+            <h2>Show sales from</h2>
+            <br>
+            <form action="/sales" method="POST" style="border-radius: 0;">
+                <input name="dateStart" id="dateStart" hidden value="<%= new Date(date.getFullYear(), date.getMonth(), 1) %>">
+                <input name="dateEnd" id="dateEnd" hidden value="<%= new Date(date.getFullYear(), date.getMonth()+1, 1) %>">
+                <button>This month</button>
+            </form>
+            <form action="/sales" method="POST" style="border-radius: 0;">
+                <input name="dateStart" id="dateStart" hidden value="<%= new Date(date.getFullYear(), date.getMonth()-1, date.getDate()) %>">
+                <input name="dateEnd" id="dateEnd" hidden value="<%= new Date(date.getFullYear(), date.getMonth(), date.getDate()+1) %>">
+                <button>Last 30 Days</button>
+            </form>
+            <form action="/sales" method="POST" style="border-radius: 0;">
+                <input name="dateStart" id="dateStart" hidden value="<%= new Date(date.getFullYear(), date.getMonth()-3, date.getDate()) %>">
+                <input name="dateEnd" id="dateEnd" hidden value="<%= new Date(date.getFullYear(), date.getMonth(), date.getDate()+1) %>">
+                <button>Last 3 Months</button>
+            </form>
+            <form action="/sales" method="POST" style="border-radius: 0;">
+                <input name="dateStart" id="dateStart" hidden value="<%= new Date(date.getFullYear(), 0, 1) %>">
+                <input name="dateEnd" id="dateEnd" hidden value="<%= new Date(date.getFullYear(), date.getMonth(), date.getDate()+1) %>">
+                <button>YTD</button>
+            </form>
+            <form action="/sales" method="POST" style="border-radius: 0;">
+                <input name="dateStart" id="dateStart" hidden value="<%= new Date(date.getFullYear()-1, date.getMonth(), date.getDate()) %>">
+                <input name="dateEnd" id="dateEnd" hidden value="<%= new Date(date.getFullYear(), date.getMonth(),  date.getDate()+1) %>">
+                <button>Last 365 Days</button>
+            </form>
+            <form action="/sales" method="POST" style="border-radius: 0;">
+                <h2>Custom Date Range</h2>
+                <input type="date" name="dateStart" id="dateStart" value="<%= new Date(date.getFullYear(), date.getMonth(), 1)%>">
+                <input type="date" name="dateEnd" id="dateEnd" value="<%= new Date(date.getFullYear(), date.getMonth(),  date.getDate()+1) %>">
+                <button>Custom Date Range</button>
+            </form>
+
+
+            <% }
+            let xValues = []
+
+            for(var i = 0; i < salesGraph.length; i++)
+            {
+                let newDate = new Date(dateStart); // Create a copy to avoid modifying the original date
+                newDate.setDate(newDate.getDate() + i);
+                xValues[i] = new Date(newDate).getDate();
+            }
+
+            %>
+            <br>
+            
+            <script>
+
+         
+                
+            window.addEventListener('DOMContentLoaded', () => {
+                
+            const ctx = document.getElementById('myChart').getContext('2d');
+
+            const ctr = document.getElementById('revenueChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                labels:   <%= JSON.stringify(xValues) %>,
+                datasets: [{
+                    label: 'Sales',
+                    data: <%= JSON.stringify(salesGraph) %>,
+                    borderColor: 'rgba(176, 38, 255, 1)',
+                    backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                    fill: false,
+                    tension: 0
+                }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Day of the Month',
+                            fontColor: '#000000'
+                        }
+                        }],
+                        yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Sales',
+                            fontColor: '#000000'
+                        }
+                        }]
+                    }
+                }
+            });
+
+            new Chart(ctr, {
+                type: 'line',
+                data: {
+                labels:   <%= JSON.stringify(xValues) %>,
+                datasets: [{
+                    label: 'Revenue',
+                    data: <%= JSON.stringify(revenueGraph) %>,
+                    borderColor: 'rgba(176, 38, 255, 1)',
+                    backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                    fill: false,
+                    tension: 0
+                }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Day of the Month',
+                            fontColor: '#000000'
+                        }
+                        }],
+                        yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Sales',
+                            fontColor: '#000000'
+                        }
+                        }]
+                    }
+                }
+            });
+            });
+
+            
+            
+            </script>
+
+            <br>
+            
+        </div>
+
+        <div><!--Deadspace--></div>
+        <!--Right-->
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+    </main>
+    <%- include("includes/footer") %>
+</body>
+</html>

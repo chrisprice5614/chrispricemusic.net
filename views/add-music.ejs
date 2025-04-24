@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <title>Add Music</title>
+</head>
+<body>
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <% errors.forEach(error => { %>
+                <div class="notice"><%= error %></div>
+            <% }) %>
+            <% if(admin) { %>
+                <br>
+                <form action="/add-music" method="POST" enctype="multipart/form-data">            
+                    <fieldset>
+                        <legend>Add Piece of Music</legend>
+                        <small>* = required</small>
+                        <br>
+                        <br>
+
+                        <label for="title">Title*</label>
+                        <input type="text" id="title" name="title" autocomplete="off" required>
+                        <br>
+
+                        <label for="content">Description*</label>
+                        <textarea id="content" name="content" required></textarea>
+                        <br>
+
+                        <label for="image">Thumbnail* <br>Upload png Image as a thumbnail. Best to use 1:1 ratio (1024x1024 is best) <br><small style="margin-left: 8px">Max 3 MB</small><br><small style="margin-left: 8px">Don't have cover art? Use one of these thumbnails <a href="/art" target="_blank" style="color: black;">here!</a></small></label>
+                        <input type="file" id="image" name="image" accept=".png,.jpg,.jpeg,.gif,.webp,.svg" required/>
+                        <br>
+    
+                        <label for="youtube">YouTube Link (Recommended to show score in video)</label>
+                        <input type="text" id="youtube" name="youtube" autocomplete="off">
+                        <br>
+    
+                        <label for="ensemble">Ensemble Type</label>
+                        <select name="ensemble" id="ensemble">
+                            <option value="Wind Ensemble/Concert Band">Wind Ensemble/Concert Band</option>
+                            <option value="String Ensemble">String Ensemble</option>
+                            <option value="Marching Band">Marching Band</option>
+                            <option value="Jazz Band">Jazz Band</option>
+                            <option value="Jazz Combo">Jazz Combo</option>
+                            <option value="Full Orchestra">Full Orchestra</option>
+                            <option value="Small Ensemble">Small Ensemble</option>
+                            <option value="Choir">Choir</option>
+                            <option value="Jazz Choir">Jazz Choir</option>
+                            <option value="Percussion">Percussion</option>
+                            <option value="Solo Piano">Solo Piano</option>
+                          </select>
+                        <br>
+
+                        <label for="createdDate">Date written* (Please use today if this is the first time this piece is being published)</label>
+                        <input type="date" id="createdDate" name="createdDate" autocomplete="off" required>
+                        <br>
+
+                        <label for="cost">Cost* (Format: 29.99)</label>
+                        <input type="text" id="cost" name="cost" autocomplete="off" required>
+                        <br>
+                        
+                        <label for="composer">Composer*</label>
+                        <input type="text" id="composer" name="composer" autocomplete="off" required>
+                        <br>
+
+                        <label for="arranger">Arranger</label>
+                        <input type="text" id="arranger" name="arranger" autocomplete="off">
+                        <br>
+
+                        <label for="difficulty">Difficulty* (1-7 Whole numbers only) <a href="/grades" target="_blank" style="color: black;">What grade is my piece?</a></label>
+                        <input type="text" id="difficulty" name="difficulty" autocomplete="off" required>
+                        <br>
+
+                        <label for="file">Upload score and parts into <b>ONE</b> pdf* <br> <small style="margin-left: 8px">Max 3 MB</small></label>
+                        <input type="file" id="file" name="file" accept=".pdf" required/>
+                        <br>
+                        <br>
+
+                        <label for="instruments">Instruments* <br>
+                        <p>Format first letter of each word upper case, seperate with commas. Double check spelling.</p>
+                        <p>eg.: Alto Saxophone, Violin, Cello, Piano</p>
+                        <p><b>No plurals (violions) and no part numbers (Violin 1, Violin 2)</b></p>
+                        <p>For saxophones, please use full name, eg. Baritone Saxophone, Tenor Saxophone, Alto Saxophone.</p>
+                        <p><b><i>Do not use Bari, Sax</i></b></p>
+                        <p>For standup bass, string bass, bass guitar, and electric bass, use Bass</p>
+                        <p>For drumkit/drumset, use drums</p>
+
+
+                        </label>
+                        <textarea id="instruments" name="instruments" required></textarea>
+                        <br>
+
+                        <br>
+                        <small style="margin-left: 20px;">If checked, users will be prompted to Tresona to obtain the rights. Please write in the description what music is copyrighted and who the original artist(s) is/are.</small><br>
+                        <input type="checkbox" id="copyright" name="copyright" value="1"><label for="copyright">Contains Copyrighted Music</label><br>
+
+                                               
+                        
+                        <br>
+        
+                        <br>
+                        <button>Submit Music</button>
+                    </fieldset>
+                </form>
+                <br>
+            <% } %>
+        </div>
+
+        <div><!--Deadspace--></div>
+        <!--Right-->
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+    </main>
+    <%- include("includes/footer") %>
+</body>
+</html>

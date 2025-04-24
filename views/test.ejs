@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chart Test</title>
+  <!-- ✅ Load Chart.js from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h2>Sales Chart</h2>
+  <!-- ✅ The canvas element must have an id -->
+  <canvas id="myChart" width="600" height="400"></canvas>
+
+  <!-- ✅ Our chart code -->
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const ctx = document.getElementById('myChart').getContext('2d');
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+          datasets: [{
+            label: 'Sales',
+            data: [10, 12, 8, 14, 11],
+            borderColor: 'rgba(0, 0, 255, 0.5)',
+            backgroundColor: 'rgba(0, 0, 255, 0.2)',
+            fill: false,
+            tension: 0.1
+          }]
+        },
+        options: {
+          plugins: {
+            legend: {
+              display: true
+            }
+          },
+          scales: {
+            y: {
+              min: 6,
+              max: 16
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

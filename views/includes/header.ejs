@@ -1,0 +1,24 @@
+<header>
+    <div class="grid">
+        <div></div>
+        
+        <a href="/"><img src="/img/logoText.png" alt="Chris Price Music logo"></a>
+
+        <div class="members-area">
+            <% if(!user){ %>
+            <a href="/login">Log in</a>
+            <% } else { %>
+            <%= user.name %>
+            <% } %>
+            <a href="/cart" style="text-decoration: none;"><ion-icon name="cart" style="font-size: Larger;"></ion-icon> <span id="cartAmount"><%= shopping_cart.length %></span></a>
+            
+        </div>
+    </div>
+    <br>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/music">Music</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+    </nav>
+</header>

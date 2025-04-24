@@ -1,0 +1,142 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <title><%= piece.title %> for <%= piece.ensembletype %></title>
+</head>
+<body>
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <% if(piece.approved == false) { %>
+                <div class="notice">This piece has not yet been approved. It's not visible to the public.</div>
+            <% } %>
+            <% if(piece.copyright) { %>
+                <div class="notice">This piece contains copyrighted material. Please visit <a href="https://www.tresonamusic.com/" target="_blank">Tresona </a>to obtain the correct performance rights.</div>
+            <% } %>
+            <% if((download > 0) || (bought)) { %>
+                <br>
+                <h2>This piece is in your library <ion-icon name="book-outline"></ion-icon></h2>
+                <br>
+                <div class="download-grid">
+                    <div>
+                        <hr>
+                    </div>
+                    <div style="width: 100%; text-align: right;">
+                        <a href="/download/<%= piece.id %>" target="blank" class="pdf-button" style="width: 100%;">Download PDF <ion-icon name="document-outline"></ion-icon></a>
+                    </div>
+                    <br>
+                </div>
+                <br>
+            <% } %>
+            <h1 class="piece-title"><%= piece.title %></h1>
+            <div class="single-piece-grid">
+                <div style="text-align: left;">
+                    <% if(piece.arranger == "") { %>
+                    <small>Written by <a href="/profile/<%= authorId %>"><%= piece.composer %></a></small>
+                    <% } else {%>
+                        <small><%= piece.composer %></small>
+                        <br>
+                        <small>Arr. <a href="/profile/<%= authorId %>"><%= piece.arranger %></a></small>
+                    <% } %>
+                </div>
+                <div class="ensemble-type-div">
+                    <div>
+                        <span class="ensemble-type"><%= piece.ensembletype %></span>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <% if(piece.youtubelink !== "") { %>
+            <iframe src="https://www.youtube.com/embed/<%= video_id%>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <% } %>
+            <div class="music-grid">
+                <h2>Difficulty: Grade <%= piece.difficulty %></h2>
+                <h2 style="text-align: right;">$<%= piece.cost %></h2>
+            </div>
+            <br>
+            <p><%- piece.content %></p>
+            <br>
+            <h3>Instrumentation: </h3>
+            <ul>
+                <% instrumentArray.forEach(instrument => { %>
+                    <li><%= instrument %></li>
+                <% }) %>
+            </ul>
+            <br>
+            <div class="bottom-grid">
+                <h2><%= piece.title %> - <%= piece.ensembletype %> - Grade <%= piece.difficulty %></h2>
+                <h2 style="text-align: right;">$<%= piece.cost %></h2>
+            </div>
+            <small>Includes unlimited digital downloads in PDF format.</small>
+            <br>
+            <br>
+
+            <%
+            let addToCartButton = 1;
+            for(let i = 0; i < shopping_cart.length; i++) { 
+                if(shopping_cart[i].id == piece.id)
+                    addToCartButton = 0;
+             }
+             if(download > 0)
+             {
+                addToCartButton = 0;
+             }
+             if(addToCartButton) { %>
+            
+            <% if(!bought) { %>
+            <div class="cart-grid">
+                <div class="cart-line">
+                    <hr>
+                </div>
+                <div>
+                    <form action="/add-cart/<%= piece.id %>" method="POST" style="background-color: rgba(0,0,0,0);"><button class="pdf-button" style="width: 100%;">Add to Cart <ion-icon name="cart-sharp"></ion-icon> </button></form>
+                </div>
+            </div>
+
+            <% } %>
+
+            <% } else { %>
+            
+                <% if(download > 0) { %>
+
+                <% } else { %>
+                <div class="notice">Piece is in your <a href="/cart">cart!</a></div>
+                <br>
+                <% } %>
+            <% } %>
+
+            <% if(owner) { %>
+            <% if(!piece.approved) { %>
+                <a href="/approve/<%= piece.id %>" class="button">Approve</a>
+            <% } else { %>
+                <a href="/feature?e=<%=piece.ensembletype%>&id=<%=piece.id%>" class="button">Feature for <%=piece.ensembletype%></a>
+            <% } %>
+            <% } %>
+
+            <br>
+            <br>
+            <h2>Questions about this piece?</h2>
+            <p><a href="/contact">Contact us</a> and we'll be happy to help!</p>
+            <br>
+        </div>
+
+        <div><!--Deadspace--></div>
+        <!--Right-->
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+    </main>
+    <%- include("includes/footer") %>
+</body>
+</html>

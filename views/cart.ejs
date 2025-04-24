@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <title>Your Cart</title>
+</head>
+<body>
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <% if(shopping_cart.length == 0) { %>
+                <div class="notice">There are no items in your cart</div>
+            <% } else { %>
+                <% 
+                    let thisIndex = -1;
+                    let totalsubcost = 0;
+                    let totalcost = 0;
+                    shopping_cart.forEach(item => { 
+                    totalsubcost += Number(item.subcost)
+                    totalcost += Number(item.cost)
+                    thisIndex++;
+                    %>
+                    <div class="cart-item">
+                        <div>
+                            <div class="music-grid">
+                                <h2><%= item.title %></h2>
+                                <h2 style="text-align: right;">$<%= item.subcost %></h2>
+                            </div>
+                            <p><%= item.title %> for <%= item.ensemble %>. Unlimited digital pdf downloads.</p>
+                        </div>
+                        <div>
+                            <form action="/remove-cart/<%= thisIndex %>" method="POST" style="background-color: rgba(0,0,0,0); text-align: right" ><button class="button">X</button></form>
+                        </div>
+                    </div>
+                <% }) %>
+                
+                <br>
+                <hr>
+                <div>Subtotal: $<%= totalsubcost.toFixed(2) %></div>
+                <div>+Tax: $<%= (totalcost - totalsubcost).toFixed(2) %></div>
+                <h3>Final total: $<%= totalcost.toFixed(2); %></h3>
+                <br>
+                <a href="/checkout"><button>Proceed to checkout</button></a>
+
+            <% } %>
+        </div>
+
+        <div><!--Deadspace--></div>
+        <!--Right-->
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+    </main>
+    <%- include("includes/footer") %>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <title>Chris Price Music</title>
+</head>
+<body>
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <br>
+            <h1>Grade Levels</h1>
+            <br>
+            <p>When choosing music for you or your ensemble, it's important to choose a piece with a grade that's appropriate. In this page, you'll see a breakdown of each grade level</p>
+            <br>
+            <br>
+            <h2>Grade 1 – Basics</h2>
+            <ul>
+            <li>For first-year players (elementary or beginning middle school)</li>
+            <li>Limited ranges (often within 1 octave)</li>
+            <li>Basic rhythms (whole, half, quarter notes)</li>
+            <li>Unison or simple harmonies</li>
+            <li>No key changes or complex dynamics</li>
+            </ul>
+            <br>
+            <h2>Grade 2 – Easy</h2>
+            <ul>
+            <li>Second-year students</li>
+            <li>Slightly expanded range</li>
+            <li>Introduction of eighth notes and simple syncopation</li>
+            <li>Basic dynamic contrasts and articulations</li>
+            <li>Simple keys (up to 1–2 sharps/flats)</li>
+            </ul>
+            <br>
+            <h2>Grade 3 – Medium</h2>
+            <ul>
+            <li>Late middle school to early high school level</li>
+            <li>Wider ranges and more independent parts</li>
+            <li>Full use of eighth notes and dotted rhythms</li>
+            <li>Moderate tempo and dynamic changes</li>
+            <li>Possible key or meter changes</li>
+            </ul>
+            <br>
+            <h2>Grade 4 – Medium Advanced</h2>
+            <ul>
+            <li>High school level</li>
+            <li>Full instrumentation expected</li>
+            <li>More complex rhythms</li>
+            <li>Advanced dynamics and articulation</li>
+            <li>Key changes, chromaticism, and occasional solos</li>
+            </ul>
+            <br>
+            <h2>Grade 5 – Advanced</h2>
+            <ul>
+            <li>Advanced high school or college level</li>
+            <li>Extended ranges and technique</li>
+            <li>Complex time signatures and mixed meter</li>
+            <li>Intricate harmonic language and orchestrations</li>
+            <li>Frequent use of solos, stylistic variety, and ensemble independence</li>
+            </ul>
+            <br>
+            <h2>Grade 6 – Semi-Professional</h2>
+            <ul>
+            <li>Collegiate or semi-professional level</li>
+            <li>Demanding technical and musical skills</li>
+            <li>Full understanding of expressive and stylistic nuance required</li>
+            <li>Very challenging rhythms, tempo shifts, and textures</li>
+            <li>Professional-level ensemble cohesion needed</li>
+            </ul>
+            <br>
+            <h2>Grade 7 – Professional</h2>
+            <ul>
+            <li>Rarely used; extremely esoteric playing styles</li>
+            <li>Extremely advanced technique, ensemble awareness, and stamina</li>
+            <li>Often includes experimental or contemporary techniques</li>
+            </ul>
+            <br>
+            <br>
+            <h2>Which grade suits your ensemble?</h2>
+            <br>
+            <div class="seven-to-one">
+                <% for(i = 0; i < 7; i++) { %>
+                    <div class="difficulty-list">
+                        <a href="/music?difficulty=<%= i+1 %>" class="button">Grade <%= i+1 %></a>
+                    </div>
+                <% } %>
+            </div>
+            <br>
+            <br>
+        </div>
+
+        <div><!--Deadspace--></div>
+        <!--Right-->
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+    </main>
+    <%- include("includes/footer") %>
+</body>
+</html>

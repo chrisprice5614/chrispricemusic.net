@@ -1,0 +1,55 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <title>Chris Price Music</title>
+</head>
+<body>
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <br>
+            <h1>About</h1>
+            <br>
+            <p><b>Chris Price Music was formed for one reason: to let musicians play music.</b> This site is designed for musicians to easily publish, purchase, and download music. We take a user-first approach, making the process of finding your perfect piece as simple as possible. Whether you're a director, gigging musician, composer, arranger, or hobbyist, we aim to make your experience at Chris Price Music exceptional.</p>
+            <br>
+            <h1>Our Mission</h1>
+            <br>
+            <p>We want music our music to be accessable, readable, and high quality. Our goal is to make your experience as a musician wonderful. This site was built with a "no headaches" policy, ensuring ease of finding your music, and downloading your purchased music. If there's anything we can do to improve, please <a href="/contact">contact us.</a></p>
+            <br>
+            <h1>Our Amazing Writers</h1>
+            <div class="profile-grid">
+                <% writers.forEach(writer => { %>
+                    <a href="/profile/<%= writer.id %>">
+                        <div class="card carousel-hover">
+                            <h3><%= writer.firstname %> <%= writer.lastname %></h3>
+                            <br>
+                            <div style="text-align: center;">
+                                <img src="/img/<% if(writer.img == null) { %>logoTransparent.png<% } else { %><%=writer.img%><% } %>" alt="Profile picture for <%= writer.firstname %> <%= writer.lastname %>">
+                            </div>
+                        </div>
+                    </a>
+                <% }) %>
+            </div>
+            <br>
+        </div>
+
+        <div><!--Deadspace--></div>
+        <!--Right-->
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+    </main>
+    <%- include("includes/footer") %>
+</body>
+</html>

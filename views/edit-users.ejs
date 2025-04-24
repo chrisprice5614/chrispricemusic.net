@@ -1,0 +1,151 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <title>Edit Users</title>
+</head>
+<body>
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <br>
+            <form action="/edit-users" method="POST">
+                <label for="search_user">Search</label>
+                <input type="text" name="search_user" id="search_user" value="<%= searchUser %>">
+                <button>Search</button>
+            </form>
+            <br>
+            <% if(searchUser != "") { %>
+            <a href="/edit-users" class="button">X <%= searchUser %></a>
+            <% } %>
+            <br>
+            <div class="pagination">
+                <div>
+                    <% if (currentPage > 1) { %>
+                    <a href="/edit-users?page=<%= currentPage - 1 %>&searchUser=<%= searchUser %>">Previous</a>
+                    <% } %>
+                </div>
+              
+                <div>
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                    <a href="/edit-users?page=<%= i %>&searchUser=<%= searchUser %>" 
+                        class="<%= i === currentPage ? 'active' : '' %>">
+                        <%= i %>
+                    </a>
+                    <% } %>
+                </div>
+              
+                <div style="text-align: right;">
+                    <% if (currentPage < totalPages) { %>
+                    <a href="/edit-users?page=<%= currentPage + 1 %>&searchUser=<%= searchUser %>" >Next</a>
+                    <% } %>
+                </div>
+              </div>
+              <br>
+            <% users.forEach(user => { %>
+                <div class="card">
+                    <div class="music-grid">
+                        <div>
+                            <h2><%= user.username %></h2>
+                        </div>
+                        <div>
+                            <h2 style="text-align: right;"><%= user.firstname %> <%= user.lastname %></h2>
+                        </div>
+                    </div>
+                    <div class="music-grid">
+                        <p>Email: <%= user.email %></p>
+                        <p style="text-align: right;">School/Organization: <%= user.schoolorg %></p>
+                    </div>
+                    <h3><% if(user.verified) { %> Verified <ion-icon name="checkmark-outline"></ion-icon> <% } %></h3>
+                    <div class="triple-grid" style="text-align: center;">
+                        <form action="/make-admin" method="post" class="user-action-form" data-action="make-admin"><input type="hidden" id="username" name="username" value="<%= user.username %>"><button><% if(user.admin) { %> Remove Admin <% } else { %> Make Admin <% } %></button></form>
+                        <form action="/make-owner" method="post" class="user-action-form" data-action="make-owner"><input type="hidden" id="username" name="username" value="<%= user.username %>"><button><% if(user.owner) { %> Remove Owner <% } else { %> Make Owner <% } %></button></form>
+                        <form action="/delete-user" method="post" class="user-action-form" data-action="delete-user"><input type="hidden" id="username" name="username" value="<%= user.username %>"><button>Delete User</button></form>
+                    </div>
+                </div>
+            <% }) %>
+            <br>
+            <div class="pagination">
+                <div>
+                    <% if (currentPage > 1) { %>
+                    <a href="/edit-users?page=<%= currentPage - 1 %>&searchUser=<%= searchUser %>">Previous</a>
+                    <% } %>
+                </div>
+              
+                <div>
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                    <a href="/edit-users?page=<%= i %>&searchUser=<%= searchUser %>" 
+                        class="<%= i === currentPage ? 'active' : '' %>">
+                        <%= i %>
+                    </a>
+                    <% } %>
+                </div>
+              
+                <div style="text-align: right;">
+                    <% if (currentPage < totalPages) { %>
+                    <a href="/edit-users?page=<%= currentPage + 1 %>&searchUser=<%= searchUser %>" >Next</a>
+                    <% } %>
+                </div>
+              </div>
+              <br>
+        </div>
+
+        <div><!--Deadspace--></div>
+        <!--Right-->
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+    </main>
+    <%- include("includes/footer") %>
+    <script>
+        document.querySelectorAll('.user-action-form').forEach(form => {
+          form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+      
+            const formData = new FormData(form);
+            const username = formData.get('username');
+            const action = form.dataset.action;
+      
+            try {
+              const response = await fetch(`/${action}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username })
+              });
+      
+              const result = await response.json();
+      
+              if (result.success) {
+                // Optional: update UI based on the result
+                const button = form.querySelector("button");
+
+                console.log(result.admin)
+
+                if(result.change==0)
+                button.innerText = (result.admin) ? "Remove Admin" : "Make Admin"
+
+                 if(result.change==1)
+                button.innerText = (result.admin) ? "Remove owner" : "Make owner"
+                // or dynamically change the button, text, etc.
+              } else {
+                alert(`Error: ${result.message}`);
+              }
+            } catch (err) {
+              console.error(err);
+              alert('Request failed.');
+            }
+          });
+        });
+      </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<div class="card">
+    <form action="/music">
+        <label for="searchPiece"><ion-icon name="search-outline"></ion-icon>Search music</label>
+        <input type="text" name="searchPiece" id="searchPiece" placeholder="Search">
+        <button>Search music</button>
+    </form>
+</div>
+<br>
+<% if(recentMarching.length > 0) { %>
+    <div class="card">
+        <h2>New for Marching Band</h2>
+        <br>
+        <% if(typeof marchingMusicFeature !== "undefined") { %>
+            <a href="/music/<%=marchingMusicFeature.id %>" class="carousel-anchor">
+                <div class="floater-anchor">
+                    <h3><%= marchingMusicFeature.title %></h3>
+                    <div class="duple-grid">
+                        <img src="/img/<%= marchingMusicFeature.img %>" alt="<%= marchingMusicFeature.title %> cover"  class="carousel-img">
+                        <div style="padding-top: 8px;">
+                            <span><%= marchingMusicFeature.composer %></span><br>
+                            <small><% if (marchingMusicFeature.arranger) { %> (arr. <%= marchingMusicFeature.arranger %>)<% } %></small><br>
+                            <small>Grade: <%= marchingMusicFeature.difficulty %></small>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        <% } %>
+        <br>
+        <% recentMarching.forEach(piece => { %>
+            <% if(piece.id!=marchingMusicFeature.id) { %>
+                <a href="/music/<%=piece.id %>" class="carousel-anchor">
+                    <div class="floater-anchor">
+                        <h3><%= piece.title %></h3>
+                        <div class="duple-grid">
+                            <img src="/img/<%= piece.img %>" alt="<%= piece.title %> cover"  class="carousel-img">
+                            <div style="padding-top: 8px;">
+                                <span><%= piece.composer %></span><br>
+                                <small><% if (piece.arranger) { %> (arr. <%= piece.arranger %>)<% } %></small><br>
+                                <small>Grade: <%= piece.difficulty %></small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <br>
+            <% } %>
+        <% }) %>
+    </div>
+<% } %>
+<br>
+<% if(recentJazz.length > 0) { %>
+    <div class="card">
+        <h2>Need some Jazz?</h2>
+        <br>
+        <% recentJazz.forEach(piece => { %>
+                <a href="/music/<%=piece.id %>" class="carousel-anchor">
+                    <div class="floater-anchor">
+                        <h3><%= piece.title %></h3>
+                        <div class="duple-grid">
+                            <img src="/img/<%= piece.img %>" alt="<%= piece.title %> cover"  class="carousel-img">
+                            <div style="padding-top: 8px;">
+                                <span><%= piece.composer %></span><br>
+                                <small><% if (piece.arranger) { %> (arr. <%= piece.arranger %>)<% } %></small>
+                                <small><%= piece.ensembletype %></small>
+                                <br>
+                                <small>Grade: <%= piece.difficulty %></small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <br>
+        <% }) %>
+    </div>
+<% } %>
+<br>
+<% if(recentConcert.length > 0) { %>
+    <div class="card">
+        <h2>Concert Band Music</h2>
+        <br>
+        <% recentConcert.forEach(piece => { %>
+                <a href="/music/<%=piece.id %>" class="carousel-anchor">
+                    <div class="floater-anchor">
+                        <h3><%= piece.title %></h3>
+                        <div class="duple-grid">
+                            <img src="/img/<%= piece.img %>" alt="<%= piece.title %> cover"  class="carousel-img">
+                            <div style="padding-top: 8px;">
+                                <span><%= piece.composer %></span><br>
+                                <small><% if (piece.arranger) { %> (arr. <%= piece.arranger %>)<% } %></small>
+                                <small><%= piece.ensembletype %></small>
+                                <br>
+                                <small>Grade: <%= piece.difficulty %></small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <br>
+        <% }) %>
+    </div>
+<% } %>
+<br>
+<br>

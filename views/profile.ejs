@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <title>Chris Price Music</title>
+</head>
+<body>
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <% errors.forEach(error => { %>
+                <div class="notice"><%= error %></div>
+            <% }) %>
+            <h1><%= thisUser.firstname %> <%= thisUser.lastname %></h1>
+            <br>
+            <% if(user.userid == thisUser.id) { %>
+                <form action="/update-image/<%= thisUser.id %>" method="POST" enctype="multipart/form-data">
+                    <label for="image">Upload new profile photo</label>
+                    <small>Limit 3 mb</small>
+                    <br>
+                        <input type="file" id="image" name="image" accept=".png,.jpg,.jpeg,.gif,.webp,.svg" required/>
+                        <br>
+                        <button>Update photo</button>
+                        <br>
+                </form>
+                <br>
+            <% } %>
+            <div>
+                <img class="profile-image" src="/img/<%= thisUser.img ? thisUser.img : "logoTransparent.png" %>" alt="Picture of <%= thisUser.firstname %> <%= thisUser.lastname %>, composer/arranger">
+                <p><%= thisUser.bio %></p>
+            </div>
+            <div style="clear: both;"></div>
+            <br>
+            <% if(user.userid == thisUser.id) { %>
+                <br>
+                <form action="/update-bio/<%= thisUser.id %>" method="POST">
+                    <label for="bio">Update bio</label>
+                    <textarea id="bio" name="bio" required><%= thisUser.bio %></textarea>
+                    <br>
+                    <button>Update bio</button>
+                    <br>
+                </form>
+            <% } %>
+            <br>
+            <% if(music.length > 0) { %>
+                <h2>Recently published works</h2>
+                <% music.forEach(piece => { %>
+                    <a href="/music/<%= piece.id %>" class="carousel-anchor">
+                        <div class="card carousel-hover">
+                            <div class="profile-piece">
+                                <img src="/img/<%= piece.img %>" alt="Thumbnail for <%= piece.title %>" style="width: 100%; aspect-ratio: 1 ;">
+                                    <div>
+                                    <div class="piece-header">
+                                        <h2><%= piece.title %></h2>
+                                        <h2 style="text-decoration: none;">$<%= piece.cost %></h2>
+                                    </div>
+                                    <div>
+                                        <span style="text-decoration: none;">For <%= piece.ensembletype %></span>
+                                        <br>
+                                        <span style="text-decoration: none;">Grade: <%= piece.difficulty %></span>
+                                    </div>
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                    </a>
+
+                <% }) %>
+            <% } %>
+            <br>
+            <br>
+            <h1 style="text-align: center">Commission This Writer</h1>
+            <br>
+            <p>Do you like what <%= thisUser.firstname %> <%= thisUser.lastname %> writes? Commission a piece from them! Fill out this form in detail and they'll get back to you! Commissions help support our writers!</p>
+            
+            <small>Writers may choose to decline, alter, or approve commissions. Payment for commissions will be decided between the writer and the person sending the commission.</small>
+            <br>
+            <br>
+            <form action="/commission" method="POST">
+                <label for="name">Your Name (First and Last)</label>
+                <input type="text" name="name" id="name" required placeholder="eg. John Doe">
+                <br>
+                <label for="email">Your Email</label>
+                <input type="text" name="email" id="email" required placeholder="eg. hrhill@spropane.com">
+                <br>
+                <label for="ensemble">Your Ensemble</label>
+                <input type="text" name="ensemble" id="ensemble" required placeholder="eg. Doe University Marching Beetles">
+                <br>
+                <label for="ensembletype">Your Ensemble Type</label>
+                <input type="text" name="ensembletype" id="ensembletype" required placeholder="eg. String Orchestra">
+                <br>
+                <label for="budget">Your Budget</label>
+                <input type="text" name="budget" id="budget" required placeholder="eg. $499.99">
+                <br>
+                <label for="content">In detail, write what you would like to have written. Please include instrumentation, date you'd like the piece complete by, strengths and weaknesses of the ensemble, length, genre, etc.</label>
+                <textarea name="content" id="content"></textarea>
+                <input type="text" name="toemail" id="toemail" hidden value="<%= thisUser.id %>">
+                <br>
+                <button>Send Commission</button>
+                <br>
+            </form>
+            <br>
+        </div>
+
+        <div><!--Deadspace--></div>
+        <!--Right-->
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+    </main>
+    <%- include("includes/footer") %>
+</body>
+</html>
+

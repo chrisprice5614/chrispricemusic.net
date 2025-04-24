@@ -1,0 +1,47 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <title>Chris Price Music</title>
+</head>
+<body>
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <h1 style="text-align: center;">Contact Us</h1>
+            <h2>Questions? Comments?</h2>
+            <form action="/contact" method="POST">
+                <label for="subject">Subject</label>
+                <input type="text" name="subject" id="subject" required>
+                <br>
+                <label for="email">Your Email</label>
+                <input type="email" name="email" id="email" required>
+                <br>
+                <label for="content">Message</label>
+                <textarea name="content" id="content" required></textarea>
+                <br>
+                <button>Send</button>
+                <br>
+            </form>
+            <br>
+        </div>
+
+        <div><!--Deadspace--></div>
+        <!--Right-->
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+    </main>
+    <%- include("includes/footer") %>
+</body>
+</html>

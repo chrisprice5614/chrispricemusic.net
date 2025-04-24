@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <title>Chris Price Music</title>
+</head>
+<body>
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <% 
+            const [monthString, yearString] = monthYear.split("-");
+            const [month, year] = monthYear.split("-").map(Number);
+
+            function getUtcMonthRange(month, year) {
+                // month is 1-indexed (e.g., April = 4)
+                
+                // First day of the month (UTC)
+                const firstDay = new Date(Date.UTC(year, month - 1, 1));
+
+                // Last day of the month (UTC): move to next month, then subtract a day
+                const lastDay = new Date(Date.UTC(year, month, 0));
+
+                return [firstDay, lastDay ];
+            }
+
+            %>
+            <h1>Payments for <%= monthString %> <%= yearString %></h1>
+            <form action="/pay-writers">
+                <input type="month" name="month" id="month" required>
+                <button>Select Month</button>
+            </form>
+            <div class="sales-box">
+                <div class="sales-bar">
+                    <div class="sales-grid">
+                        <p style="text-decoration: underline;">Name/Email</p>
+                        <p style="text-decoration: underline;">Sales</p>
+                        <p style="text-decoration: underline;">Revenue</p>
+                    </div>
+                </div>
+                
+                    <% users.forEach(user => {
+                        let revenue = 0;
+                        let sales = 0
+                        let multiplier = 0.9;
+
+                        music.forEach(piece => {
+                            console.log(piece.sales)
+                            if((piece.sales != null)&&(piece.sales != "[]"))
+                            {
+                                if(piece.author == user.username)
+                                {
+                                    let saleArray = JSON.parse(piece.sales)
+
+                                    saleArray.forEach(sale => {
+                                        let range = getUtcMonthRange(month, year)
+                                        let saleDate = new Date(sale)
+                                        let date1 = new Date(range[0])
+                                        let date2 = new Date(range[1])
+                                        
+                                        if((saleDate > date1)&&(saleDate < date2))
+                                        {
+                                            sales++;
+                                            revenue += Number(piece.cost)*multiplier;
+                                        }
+
+                                    })
+                                }
+                            }
+                        })
+                        %>
+                        <div class="sales-bar">
+                            <div class="sales-grid">
+                                <div>
+                                    <p><%= user.firstname %> <%= user.lastname %></p>
+                                    <p><%= user.email %></p>
+                                </div>
+                                <p><%= sales %></p>
+                                <p>$<%= revenue.toFixed(2) %></p>
+                            </div>
+                        </div>
+                        <%
+
+                    }) %>
+            </div>
+        </div>
+
+        <div><!--Deadspace--></div>
+        <!--Right-->
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+    </main>
+    <%- include("includes/footer") %>
+</body>
+</html>

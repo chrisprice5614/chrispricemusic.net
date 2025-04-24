@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+    <%- include("includes/head") %>
+    <title>Checkout</title>
+</head>
+
+<body>
+    <%- include("includes/header") %>
+    <main>
+        
+        <div><!--Deadspace--></div>
+        <!--left-->
+        <div>
+            <%- include("includes/left-floater") %>
+        </div>
+        <div><!--Deadspace--></div>
+
+        <!--Center-->
+        <div>
+            <form action="/pay" class="hidden" method="post">
+                <div class="clean">
+                    <br>
+                    <h1 style="margin: 2px 12px;">Secure Checkout</h1>
+                    <small style="margin: 2px 12px;">All purchases are secure. Card information is never stored on this website. All purchases are available for life.</small>
+                    <br>
+                    <br>
+                    <div class="checkout-grid">
+                        <div>
+                            <div class="card">
+                                <h2>1. Email</h2>
+                                <% if(user) { %>
+                                <p>You are logged in. This order will be saved to your account, forever available under <b>Purchases</b>. A link will also be sent to your email.</p>
+                                <input type="email" id="email" name="email" autocomplete="off" value="" hidden>
+                                <% } else { %>
+                                <p>Accounts are not required for purchases but they are <i>recomended.</i> Accounts have access to a library where purchased items are available for download. Users without an account will still be able to download purchased items at any time from the links sent to this email.
+                                </p>
+                                <br>
+                                <label for="email">Email*</label>
+                                <small>Please double check email spelling!!</small>
+                                <input type="email" id="email" name="email" autocomplete="off" required placeholder="johndoe@web.com">
+                                <br>
+                                <% } %>
+                            </div>
+                            <div class="card">
+                                
+                                <h2>2. Order Summary</h2>
+                                <br>
+                                <%
+                                    let subtotal = 0;
+                                    let cost = 0; 
+                                    shopping_cart.forEach(item => { 
+                                    subtotal += item.subcost;
+                                    cost += item.cost;
+                                    %>
+                                    <div class="item-grid">
+                                        <div>
+                                            <img src="/img/<%= item.img %>" alt="Icon for <%=  %>" class="checkout-thumbnail">
+                                        </div>
+                                        <div>
+                                            <h3 style="margin: 2px 8px;"><%= item.title %></h3>
+                                            <small style="margin: 2px 8px;"><%= item.ensemble %></small>
+                                        </div>
+                                        <div>
+                                            <h3 style="text-align: right;">$<%= item.subcost %></h3>
+                                            <small style="text-align: right;">+$<%= (item.cost - item.subcost).toFixed(2) %> Tax</small>
+                                        </div>
+                                    </div>
+                                    <br>
+                                <% }) %>
+                                <hr>
+                                <div class="music-grid">
+                                    <div>
+                                        <h2>Order Total</h2>
+                                    </div>
+                                    <div>
+                                        <h3 style="text-align: right;">Subtotal: $<%= subtotal %></h3>
+                                        <p style="text-align: right;">+$<%= (cost - subtotal).toFixed(2) %> Tax</p>
+                                        <hr>
+                                        <h2 style="text-align: right;">Total: $<%= cost.toFixed(2) %></h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="card">
+                                <h2>3. Checkout</h2>
+                                <br>
+                                <button type="submit" class="hidden-button">
+                                    <div class="paypal-button">
+                                        <img src="/img/paypal.svg" alt="" class="">
+                                    </div>
+                                </button>
+                                </form>
+                                <br>
+                                <div class="separator">Or</div>
+                                <form action="/create-checkout-session" class="hidden" method="post" style="background-color: rgba(0,0,0,0);">
+                                    <input type="email" name="stripeemail" id="stripeemail" hidden>
+                                    <button type="submit" class="hidden-button">
+                                        <div class="card-button">
+                                            <ion-icon name="card-outline" style="font-size: large;"></ion-icon> <span>Pay With Credit/Debit Card</span>
+                                        </div>
+                                    </button>
+                                </form>
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        <div></div>
+
+        <div>
+            <%- include("includes/right-floater") %>
+        </div>
+        <div></div>
+
+    </main>
+    <%- include("includes/footer") %>
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const emailInput = document.getElementById("email");
+    const stripeForm = document.querySelector('form[action="/create-checkout-session"]');
+    const stripeEmailInput = document.getElementById("stripeemail");
+
+    stripeForm.addEventListener("submit", (e) => {
+      // Prevent submission if email is empty
+      if (!emailInput.value) {
+        alert("Please enter your email before continuing.");
+        e.preventDefault();
+        return;
+      }
+
+      stripeEmailInput.value = emailInput.value;
+    });
+  });
+</script>
+</body>
+</html>

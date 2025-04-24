@@ -1,0 +1,32 @@
+
+<% if(typeof register === 'undefined') { 
+if(!user){ %>
+<div class="card">
+    <h2>Account</h2>
+    <small>Sign in to download purchased music.</small>
+    <br>
+    <a href="/login"><button>Log in</button></a>
+    <a href="/register"><button>Register</button></a>
+</div>
+<% }
+if(user) { %>
+<div class="card">
+    <h2>Hello, <%= user.name %></h2>
+    <a href="/logout"><button>Log out <ion-icon name="exit-outline"></ion-icon></button></a>
+    <a href="/purchases"><button>Your library <ion-icon name="book-outline"></ion-icon></button></a>
+    <a href="/cart"><button>Your cart <ion-icon name="cart-outline"></ion-icon></button></a>
+    <% if(admin) { %>
+        <h2>Writer Tools</h2>
+        <a href="/add-music"><button>Add Music <ion-icon name="add-circle-outline"></ion-icon></button></a>
+        <a href="/edit-music"><button>Edit Music <ion-icon name="pencil-outline"></ion-icon></button></a>
+        <a href="/sales"><button>Sales <ion-icon name="analytics-outline"></ion-icon></button></a>
+        <a href="/profile/<%= user.userid %>"><button>Profile <ion-icon name="person-outline"></ion-icon></button></a>
+        <% if(owner) { %>
+        <h2>Owner Tools</h2>
+        <a href="/edit-users"><button>Edit Users <ion-icon name="people-outline"></ion-icon></button></a>
+        <a href="/pay-writers"><button>Pay Writers <ion-icon name="cash-outline"></ion-icon></button></a>
+        <a href="/send-email"><button>Send Email <ion-icon name="megaphone-outline"></ion-icon></button></a>
+        <% } %>
+    <% } %>
+</div>
+<% }} %>

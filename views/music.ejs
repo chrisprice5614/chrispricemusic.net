@@ -55,9 +55,15 @@
                 </div>
             </div>
             <br>
+            <br>
             <% if(piece.youtubelink !== "") { %>
             <iframe src="https://www.youtube.com/embed/<%= video_id%>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             <% } %>
+            <audio controls style="width: 100%;">
+                <source src="/audio/<%= piece.mp3 %>" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <br>
             <div class="music-grid">
                 <h2>Difficulty: Grade <%= piece.difficulty %></h2>
                 <h2 style="text-align: right;">$<%= piece.cost %></h2>

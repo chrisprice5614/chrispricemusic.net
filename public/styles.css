@@ -758,6 +758,17 @@ form small{
     text-align: center;
 }
 
+.homepage-piece{
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
+
+@media only screen and (max-width:1080px){
+    .homepage-piece{
+        grid-template-columns: 1fr;
+    }
+}
+
 
 @media only screen and (max-width:1280px) and (min-width:1080px){
     .seven-to-one{

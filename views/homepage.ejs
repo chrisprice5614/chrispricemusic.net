@@ -182,9 +182,9 @@
                     <% newMusic.forEach(piece => { %>
                         <a href="/music/<%=piece.id%>" class="carousel-anchor">
                             <div class="card carousel-hover" style="height: 95%;">
-                                <div class="profile-piece">
+                                <div class="homepage-piece">
                                     <img src="/img/<%= piece.img %>" alt="Thumbnail for <%= piece.title %>" style="width: 100%; aspect-ratio: 1 ;">
-                                        <div>
+                                    <div>
                                         <div class="piece-header">
                                             <h3><%= piece.title %></h3>
                                             <br>
@@ -209,7 +209,7 @@
             <div class="seven-to-one">
                 <% for(i = 0; i < 7; i++) { %>
                     <div class="difficulty-list">
-                        <a href="/music?difficulty=<%= i+1 %>" class="button">Grade <%= i+1 %></a>
+                        <a href="/music?searchGrade=<%= i+1 %>" class="button">Grade <%= i+1 %></a>
                     </div>
                 <% } %>
             </div>

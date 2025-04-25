@@ -19,13 +19,17 @@ const fileStorageEngine = multer.diskStorage({
     
     destination: (req, file, cb) => {
           
-        if(file.mimetype != "application/pdf")
+        if(file.mimetype == "application/pdf")
         {
-            cb(null, "./public/img")
+            cb(null, "./pdf")
+        }
+        else if(file.mimetype == "audio/mpeg")
+        {
+            cb(null, "./public/audio")
         }
         else
         {
-            cb(null, "./pdf")
+            cb(null, "./public/img")
         }
     },
     filename: (req, file, cb) => {
@@ -34,20 +38,26 @@ const fileStorageEngine = multer.diskStorage({
 
         if(req.body.title)
         {
-            if(file.mimetype != "application/pdf")
+            if(file.mimetype == "application/pdf")
             {
                 const uniqueSuffix = Date.now() + "-" + Math.round(Math.random()*1e9);
                 const newName = req.body.title.replace(/\s/g, '')
-                cb(null, newName + "-" + uniqueSuffix + path.extname(file.originalname))
+                cb(null, newName + "-" + uniqueSuffix + ".pdf")
+            }
+            else if(file.mimetype == "audio/mpeg")
+            {
+                const uniqueSuffix = Date.now() + "-" + Math.round(Math.random()*1e9);
+                const newName = req.body.title.replace(/\s/g, '')
+                cb(null, newName + "-" + uniqueSuffix + ".mp3")
             }
             else
             {
                 
-
-
                 const uniqueSuffix = Date.now() + "-" + Math.round(Math.random()*1e9);
                 const newName = req.body.title.replace(/\s/g, '')
-                cb(null, newName + "-" + uniqueSuffix + ".pdf")
+                cb(null, newName + "-" + uniqueSuffix + path.extname(file.originalname))
+
+                
             }
         }
         else
@@ -59,7 +69,44 @@ const fileStorageEngine = multer.diskStorage({
         }
     }
     });
-const upload = multer({storage: fileStorageEngine, limits: {fileSize: 3000000}})
+const upload = multer({storage: fileStorageEngine, fileFilter: (req, file, cb) => {
+    const mime = file.mimetype;
+    const allowedTypes = [
+      'application/pdf',
+      'image/jpeg',
+      'image/png',
+      'audio/mpeg',
+    ];
+
+    if (allowedTypes.includes(mime)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Unsupported file type'), false);
+    }
+}})
+
+const fileSizeLimiter = (req, res, next) => {
+    const file = req.file;
+    if (!file) return next();
+  
+    const mime = file.mimetype;
+    const size = file.size;
+  
+    const limits = {
+      'application/pdf': 6 * 1024 * 1024,   // 6 MB
+      'image/jpeg': 3 * 1024 * 1024,        // 3 MB
+      'image/png': 3 * 1024 * 1024,
+      'audio/mpeg': 12 * 1024 * 1024,       // 12 MB (mp3)
+    };
+  
+    const limit = limits[mime];
+    if (limit && size > limit) {
+      return res.status(400).json({ error: `File too large. Limit is ${limit / (1024 * 1024)}MB.` });
+    }
+  
+    next();
+  };
+
 db.pragma("journal_mode = WAL") //Makes it faster
 //npm install nodemon
 
@@ -160,7 +207,8 @@ const createTables = db.transaction(() => {
         uploadDate STRING NOT NULL,
         author STRING NOT NULL,
         pdf STRING NOT NULL,
-        img STRING NOT NULL
+        img STRING NOT NULL,
+        mp3 STRING NOT NULL
         )
         `
     ).run()
@@ -1030,14 +1078,28 @@ app.post("/update-bio/:id", mustBeAdmin, (req,res) => {
     res.redirect(`/profile/${req.user.userid}`)
 })
 
-app.post("/update-image/:id", mustBeAdmin, upload.fields([{ name: 'image', maxCount: 1 }]), fileSizeLimitErrorHandler, (req,res) => {
+app.post("/update-image/:id", mustBeAdmin, upload.fields([{ name: 'image', maxCount: 1 }]), fileSizeLimiter, (req,res) => {
 
     const errors = res.locals.errors;
 
+    const getUserStatement = db.prepare("SELECT * FROM users WHERE id = ?")
+    const thisUser = getUserStatement.get(req.user.userid);
+
+
+    const filePath = __dirname+'/public/img/' + thisUser.img;
+    
+    fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('Error deleting the file:', err);
+        }
+
+      });
 
     if(errors.length) {
         return res.redirect(`/profile/${req.user.userid}`) //returning to the login page while also passing the object "errors"
     }
+
+    
 
     const imgUrl = req.files.image[0].filename
     if(req.user.userid == req.params.id)
@@ -2202,7 +2264,7 @@ app.post("/create-checkout-session", async (req,res) => {
                 
                 price_data: {
                     currency: "usd",
-                    unit_amount: (num*100),
+                    unit_amount: Math.round(num*100),
                     product_data: {
                         name: item.title
                     },
@@ -2847,7 +2909,7 @@ app.post("/add-music", mustBeAdmin, upload.fields([{
   }, {
     name: 'image', maxCount: 1,
     fieldSize: 6
-  }]), fileSizeLimitErrorHandler, (req, res) =>{
+  }, {name: 'mp3', maxCount: 1}]), fileSizeLimiter, (req, res) =>{
     
     const errors = res.locals.errors;
 
@@ -2865,7 +2927,7 @@ app.post("/add-music", mustBeAdmin, upload.fields([{
     
     const pdfUrl = req.files.file[0].filename
     const imgUrl = req.files.image[0].filename
-    
+    const mp3Url = req.files.mp3[0].filename
 
     if(typeof req.body.copyright === "undefined")
     {
@@ -2881,8 +2943,8 @@ app.post("/add-music", mustBeAdmin, upload.fields([{
 
     const thisDate = new Date().toISOString();
 
-    const ourStatement = db.prepare("INSERT INTO music (title, content, youtubelink, ensembletype, cost, composer, arranger, difficulty, instruments, copyright, createdDate, approved, uploadDate, author, pdf, img) VALUES (? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? )")
-    const result = ourStatement.run(req.body.title, req.body.content, req.body.youtube, req.body.ensemble, req.body.cost, req.body.composer, req.body.arranger, req.body.difficulty, req.body.instruments, req.body.copyright, req.body.createdDate, 0, thisDate, req.user.username, pdfUrl, imgUrl)
+    const ourStatement = db.prepare("INSERT INTO music (title, content, youtubelink, ensembletype, cost, composer, arranger, difficulty, instruments, copyright, createdDate, approved, uploadDate, author, pdf, img, mp3) VALUES (? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?)")
+    const result = ourStatement.run(req.body.title, req.body.content, req.body.youtube, req.body.ensemble, req.body.cost, req.body.composer, req.body.arranger, req.body.difficulty, req.body.instruments, req.body.copyright, req.body.createdDate, 0, thisDate, req.user.username, pdfUrl, imgUrl, mp3Url)
 
     const lookupStatement = db.prepare("SELECT * FROM music WHERE ROWID = ?")
     const ourPiece = lookupStatement.get(result.lastInsertRowid)
@@ -2895,9 +2957,8 @@ app.post("/add-music", mustBeAdmin, upload.fields([{
 
 app.post("/update-music/:id", mustBeAdmin, upload.fields([{
     name: 'file', maxCount: 1
-  }, {
-    name: 'image', maxCount: 1,
-    fieldSize: 6
+  }, {name: 'mp3', maxCount: 1}, {
+    name: 'image', maxCount: 1
   }]), fileSizeLimitErrorHandler, (req, res) =>{
     
     const errors = res.locals.errors;
@@ -2916,8 +2977,18 @@ app.post("/update-music/:id", mustBeAdmin, upload.fields([{
     req.body.arranger = req.body.arranger.trim()
     req.body.instruments = req.body.instruments.trim()
 
-    const pdfUrl = req.files.file[0].filename
-    const imgUrl = req.files.image[0].filename
+    let pdfUrl = null;
+    let imgUrl = null;
+    let mp3Url = null;
+
+    if(req.files?.file?.[0])
+    pdfUrl = req.files.file[0].filename
+
+    if(req.files?.image?.[0])
+    imgUrl = req.files.image[0].filename
+
+    if(req.files?.mp3?.[0])
+    mp3Url = req.files.mp3[0].filename
 
 
     if(typeof req.body.copyright === "undefined")
@@ -2931,24 +3002,39 @@ app.post("/update-music/:id", mustBeAdmin, upload.fields([{
 
     
 
-    const filePath = __dirname+'/pdf/' + piece.pdf;
-    
-    fs.unlink(filePath, (err) => {
+    if (pdfUrl != null) {
+        const filePath = __dirname+'/pdf/' + piece.pdf;
+        
+        fs.unlink(filePath, (err) => {
+            if (err) {
+            console.error('Error deleting the file:', err);
+            return;
+            }
+
+        });
+    }
+
+    if (imgUrl != null) {
+        const imgPath = __dirname+'/public/img/' + piece.img
+        fs.unlink(imgPath, (err) => {
+            if (err) {
+            console.error('Error deleting the file:', err);
+            return;
+            }
+
+        });
+    }
+
+    if (mp3Url != null) {
+      const mp3Path = __dirname+'/public/audio/' + piece.mp3
+      fs.unlink(mp3Path, (err) => {
         if (err) {
           console.error('Error deleting the file:', err);
           return;
         }
 
       });
-
-      const imgPath = __dirname+'/public/img/' + piece.img
-      fs.unlink(imgPath, (err) => {
-        if (err) {
-          console.error('Error deleting the file:', err);
-          return;
-        }
-
-      });
+    }
 
     if(!piece) {
         return res.redirect("/")
@@ -2959,8 +3045,8 @@ app.post("/update-music/:id", mustBeAdmin, upload.fields([{
 
     const thisDate = new Date().toString();
 
-    const ourStatement = db.prepare("UPDATE music set title = ?, content = ?, youtubelink = ?, ensembletype = ?, cost = ?, composer = ?, arranger = ?, difficulty = ?, instruments = ?, copyright = ?, approved = ?, uploadDate = ?, pdf = ?, img = ? WHERE id = ?")
-    const result = ourStatement.run(req.body.title, req.body.content, req.body.youtube, req.body.ensemble, req.body.cost, req.body.composer, req.body.arranger, req.body.difficulty, req.body.instruments, req.body.copyright, 0, thisDate, pdfUrl, imgUrl, req.params.id)
+    const ourStatement = db.prepare("UPDATE music set title = ?, content = ?, youtubelink = ?, ensembletype = ?, cost = ?, composer = ?, arranger = ?, difficulty = ?, instruments = ?, copyright = ?, approved = ?, uploadDate = ?, pdf = ?, img = ?, mp3 = ? WHERE id = ?")
+    const result = ourStatement.run(req.body.title, req.body.content, req.body.youtube, req.body.ensemble, req.body.cost, req.body.composer, req.body.arranger, req.body.difficulty, req.body.instruments, req.body.copyright, 0, thisDate, pdfUrl == null ? piece.pdf : pdfUrl, imgUrl == null ? piece.img : imgUrl, mp3Url == null ? piece.mp3 : mp3Url ,req.params.id,)
 
     const lookupStatement = db.prepare("SELECT * FROM music WHERE ROWID = ?")
     const ourPiece = lookupStatement.get(req.params.id)

@@ -20,7 +20,7 @@
                 <div class="notice"><%= error %></div>
             <% }) %>
             <% if(admin) { %>
-                <div class="notice">⚠️When editing a piece, you <b>MUST</b> upload a new PDF or reupload the original. Same goes for the Thumbnail image. Both can be downloaded below: ⚠️</div>
+                <div class="notice">⚠️After editing a piece, it must be approved again. Speed up the process by emailing <a href="mailto:chris@chrispricemusic.net"> chris@chrispricemusic.net</a> <b>before</b> making changes.⚠️</div>
                 <br>
                 <a href="/download/<%= piece.id %>" target="blank" class="pdf-button">Download original PDF <ion-icon name="document-outline"></ion-icon></a>
                 <br>
@@ -42,8 +42,12 @@
                         <textarea id="content" name="content" required><%= piece.content %></textarea>
                         <br>
 
-                        <label for="image">Thumbnail* <br>Upload png Image as a thumbnail. Best to use 1:1 ratio (1024x1024 is best) <br><small style="margin-left: 8px">Max 3 MB</small><br><small style="margin-left: 8px">Don't have cover art? Use one of these thumbnails <a href="/art" target="_blank" style="color: black;">here!</a></small></label>
-                        <input type="file" id="image" name="image" accept=".png,.jpg,.jpeg,.gif,.webp,.svg" required/>
+                        <label for="image">Thumbnail <br>Upload png Image as a thumbnail. Best to use 1:1 ratio (1024x1024 is best) <br><small style="margin-left: 8px">Max 3 MB</small><br><small style="margin-left: 8px">Don't have cover art? Use one of these thumbnails <a href="/art" target="_blank" style="color: black;">here!</a></small></label>
+                        <input type="file" id="image" name="image" accept=".png,.jpg"/>
+                        <br>
+
+                        <label for="mp3">Upload .mp3 audio <br> <small style="margin-left: 8px">Max 12 MB</small></label>
+                        <input type="file" id="mp3" name="mp3" accept=".mp3"/>
                         <br>
     
                         <label for="youtube">YouTube Link</label>
@@ -86,8 +90,8 @@
                         <input type="text" id="difficulty" name="difficulty" autocomplete="off" required value="<%= piece.difficulty %>">
                         <br>
 
-                        <label for="file">Upload score and parts into <b>ONE</b> pdf* <br> <small style="margin-left: 8px">Max 3 MB</small></label>
-                        <input type="file" id="file" name="file" accept=".pdf" required/>
+                        <label for="file">Upload score and parts into <b>ONE</b> pdf <br> <small style="margin-left: 8px">Max 3 MB</small></label>
+                        <input type="file" id="file" name="file" accept=".pdf"/>
                         <br>
                         <br>
 

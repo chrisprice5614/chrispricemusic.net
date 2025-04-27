@@ -772,6 +772,8 @@ app.get("/sales", mustBeAdmin, (req,res) => {
     }
     date = new Date()
 
+    console.log(allMusic)
+
     const dateStart = new Date(date.getFullYear(), date.getMonth(), 1);
     const dateEnd = new Date(date.getFullYear(), date.getMonth() + 1, 1);
 
@@ -828,11 +830,17 @@ app.get("/verify/:id", (req,res) => {
             maxAge: 1000 * 60 * 60 * 24
         }) //name, string to remember,
 
-        return res.render("verified")
+        return res.redirect("/verified")
     } catch(err)
     {
         return res.redirect("/")
     }
+})
+
+app.get("/verified", (req,res) => {
+
+    return res.render("/verified")
+
 })
 
 

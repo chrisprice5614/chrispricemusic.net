@@ -118,6 +118,7 @@
 
     </main>
     <%- include("includes/footer") %>
+    <% if(!user)  { %>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
     const emailInput = document.getElementById("email");
@@ -136,5 +137,6 @@
     });
   });
 </script>
+<% } %>
 </body>
 </html>

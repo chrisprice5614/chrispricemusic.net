@@ -142,6 +142,40 @@ nav a:hover{
     width: 80%;
 }
 
+.add-button{
+    text-align: center;
+    color: var(--color-light);
+    font-size: large;
+    text-decoration: none;
+    font-weight: 600;
+    border: solid var(--color-light) var(--border-width);
+    padding: 8px 12px;
+    background-color: var(--color-secondary-active);
+    border-radius: 4px;
+    font-size: x-large;
+    
+    margin: 0;
+    width: 80%;
+}
+
+.add-button:hover{
+    text-align: center;
+    border-color: var(--color-light);
+    background-color: var(--color-light);
+    color: var(--color-secondary-active);
+    cursor: pointer;
+    padding: 8px 12px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    border-radius: 4px;
+    font-size: x-large;
+
+    
+    margin: 0;
+    width: 80%;
+}
+
 .grid{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -326,6 +360,11 @@ iframe{
     border-bottom: 2px solid var(--color-primary);
     margin-bottom: 16px;
     padding-bottom: 8px;
+}
+
+.music-title-grid{
+    display: grid;
+    grid-template-columns: 3fr 1fr 2fr;
 }
 
 p{
@@ -581,7 +620,7 @@ form small{
 }
 
 @media only screen and (max-width:1080px){
-    .duple-grid-res{
+    .duple-grid-res, .music-title-grid{
         grid-template-columns: 1fr;
     }
 }

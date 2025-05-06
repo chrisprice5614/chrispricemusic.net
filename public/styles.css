@@ -158,6 +158,14 @@ nav a:hover{
     width: 80%;
 }
 
+.music-thumb{
+    aspect-ratio: 1;
+    width: clamp(50%, 40vh, 80%);
+    border: solid 2px var(--color-light);
+    margin-bottom: 8px;
+    box-shadow: 1px 1px 8px #ccc;
+}
+
 .add-button:hover{
     text-align: center;
     border-color: var(--color-light);

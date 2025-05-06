@@ -92,10 +92,15 @@
                 </div>
             </div>
             <br>
+            <div style="text-align: center;">
+                <img src="/img/<%= piece.img %>" alt="Thumbnail for <%= piece.title %>" class="music-thumb">
+            </div>
+            <br>
             <br>
             <% if(piece.youtubelink !== "") { %>
             <iframe src="https://www.youtube.com/embed/<%= video_id%>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             <% } %>
+            <br>
             <br>
             <audio controls style="width: 100%;">
                 <source src="/audio/<%= piece.mp3 %>" type="audio/mpeg">

@@ -59,7 +59,7 @@
                     
                     <% if(!bought) { %>
                         <div>
-                            <form action="/add-cart/<%= piece.id %>" method="POST" style="background-color: rgba(0,0,0,0);"><button class="add-button" style="width: 100%;">Add to Cart <ion-icon name="cart-sharp"></ion-icon> </button></form>
+                            <form action="/add-cart/<%= piece.id %>" class="noborder" method="POST" style="background-color: rgba(0,0,0,0);"><button class="add-button" style="width: 100%;">Add to Cart <ion-icon name="cart-sharp"></ion-icon> </button></form>
                         </div>
 
                     <% } %>
@@ -148,7 +148,7 @@
                     <hr>
                 </div>
                 <div>
-                    <form action="/add-cart/<%= piece.id %>" method="POST" style="background-color: rgba(0,0,0,0);"><button class="add-button" style="width: 100%;">Add to Cart <ion-icon name="cart-sharp"></ion-icon> </button></form>
+                    <form action="/add-cart/<%= piece.id %>" class="noborder" method="POST" style="background-color: rgba(0,0,0,0);"><button class="add-button" style="width: 100%;">Add to Cart <ion-icon name="cart-sharp"></ion-icon> </button></form>
                 </div>
             </div>
 

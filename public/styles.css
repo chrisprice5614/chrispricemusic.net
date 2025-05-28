@@ -5,21 +5,22 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     outline: 0;
     vertical-align: baseline;
     background: transparent;
-    font-family: "Open Sans", sans-serif;
+    font-family: "source-sans-3", sans-serif;
     font-weight: 400;
     font-style: normal;
     line-height: 1.4em;
 }
 
 :root{
-    --background-dark: #0d0b0e;
-    --background-light: #211825;
-    --color-light: #eaeaea;
-    --color-dark: #b3a7b8;
-    --color-primary: #b026ff;
-    --color-primary-active: #5d00b1;
-    --color-secondary: #00d2b8;
-    --color-secondary-active: #009784;
+    --background-dark: #fdf9ff;
+    --background-light: #f9efff;
+    --color-light: #131313;
+    --color-dark: #0a0a0a;
+    --color-primary: #cc72ff;
+    --color-primary-active: #b75cec;
+    --card-color: #f1d8ff;
+    --color-secondary: rgb(206, 33, 39);
+    --color-secondary-active: rgb(206, 33, 39);
     --border-width: 1.5px;
     --color-reverse: #333;
 }
@@ -35,8 +36,8 @@ i {
 
 
 h1, h2, h3, h4, h5{
-    font-family: "quicksand", sans-serif;
-    font-weight: 700;
+    font-family: "Playfair-Display", serif;
+    font-weight: 500;
     font-style: normal;
     margin-bottom: 4px;
 }
@@ -144,7 +145,7 @@ nav a:hover{
 
 .add-button{
     text-align: center;
-    color: var(--color-light);
+    color: var(--background-light);
     font-size: large;
     text-decoration: none;
     font-weight: 600;
@@ -244,7 +245,9 @@ main div{
     margin-top: 10px;
     padding: 6px;
     background-color: var(--color-primary);
-    box-shadow: 2px 2px 0px var(--color-dark);
+    border: var(--border-width) solid var(--color-dark);
+    box-shadow: 0px 0px 4px var(--color-light);
+    border-radius: 4px;
 
 }
 
@@ -257,10 +260,15 @@ main div{
 }
 
 form{
-    background-color: var(--color-light);
+    background-color: var(--background-light);
     border-radius: 4px;
-    color: var(--background-dark);
+    color: var(--color-dark);
     padding: 6px;
+    border: var(--border-width) solid var(--color-dark)
+}
+
+.noborder{
+    border: none;
 }
 
 fieldset{
@@ -291,9 +299,9 @@ input, textarea{
     padding: 8px;
     /*top right bottom left*/
     margin: 8px 8px 8px 20px;
-    background-color: var(--color-light);
+    background-color: var(--background-light);
     border-radius: 4px;
-    border: 1.5px solid var(--background-dark);
+    border: 1.5px solid var(--color-dark);
 }
 
 textarea{
@@ -326,9 +334,9 @@ form button:hover{
 }
 
 select{
-    background-color: var(--color-light);
+    background-color: var(--background-light);
     border-radius: 4px;
-    border: 1.5px solid var(--background-dark);
+    border: 1.5px solid var(--color-dark);
     margin: 8px 8px 8px 20px;
     padding: 8px;
 }
@@ -673,14 +681,14 @@ form small{
 .card-button{
     background-color: #242424;
     border-radius: 4px;
-    color: var(--color-light);
+    color: var(--background-dark);
     text-align: center;
     padding: 16px 0;
 }
 
 .card-button:hover{
     background-color: rgb(44, 44, 44);
-    color: var(--color-light);
+    color: var(--background-light);
     filter: contrast(90%);
     cursor: pointer;
 }

@@ -13,6 +13,7 @@ const fs = require("fs");
 const nodemailer = require("nodemailer")
 const Chart = require("chart.js")
 const path = require('path');
+const axios = require('axios');
 const { getCompileCacheDir } = require("module")
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 const fileStorageEngine = multer.diskStorage({
@@ -468,7 +469,7 @@ app.get("/login", (req,res) =>{
     //If we're logged in, we don't need to be here!
     if(req.user)
     {
-        res.redirect("/")
+        return res.redirect("/")
     }
 
     res.render("login-register",{register})
@@ -839,7 +840,7 @@ app.get("/verify/:id", (req,res) => {
 
 app.get("/verified", (req,res) => {
 
-    return res.render("/verified")
+    return res.render("verified")
 
 })
 
@@ -1767,7 +1768,47 @@ app.get("/contact", (req,res) => {
     res.render("contact")
 })
 
-app.post("/contact", (req,res) => {
+app.post("/contact", async (req,res) => {
+
+    const errors = []
+
+    const recaptchaResponse  = req.body['g-recaptcha-response'];
+
+
+    if(!recaptchaResponse )
+    {
+        errors.push("You must pass the CAPTCHA")
+    }
+
+    //Captcha verify
+    try {
+    // Verify with Google
+    const verifyURL = `https://www.google.com/recaptcha/api/siteverify`;
+
+    const response = await axios.post(verifyURL, null, {
+      params: {
+        secret: process.env.RECAPTCHA_SECRET_KEY,
+        response: recaptchaResponse,
+        remoteip: req.ip, // optional, can help Google detect abuse
+      },
+    });
+
+    const data = response.data;
+
+        if (data.success) {
+            //Continue With whatever
+        } else {
+        // ❌ reCAPTCHA failed
+        errors.push("You must pass the CAPTCHA")
+        }
+    } catch (error) {
+        errors.push("You must pass the CAPTCHA")
+    }
+
+    if(errors.length == 0)
+    {
+    
+
     const email = req.body.email;
     const subject = req.body.subject;
     const content = req.body.content;
@@ -1896,9 +1937,53 @@ app.post("/contact", (req,res) => {
     sendEmail("chrisprice5614@gmail.com","CONTACT FORM SUBMISSION",html)
 
     res.render("message-sent")
+    }
+    else
+    {
+        res.redirect("/contact")
+    }
 })
 
-app.post("/commission", (req,res) => {
+app.post("/commission", async (req,res) => {
+
+
+    const errors = []
+
+    const recaptchaResponse  = req.body['g-recaptcha-response'];
+
+
+    if(!recaptchaResponse )
+    {
+        errors.push("You must pass the CAPTCHA")
+    }
+
+    //Captcha verify
+    try {
+    // Verify with Google
+    const verifyURL = `https://www.google.com/recaptcha/api/siteverify`;
+
+    const response = await axios.post(verifyURL, null, {
+      params: {
+        secret: process.env.RECAPTCHA_SECRET_KEY,
+        response: recaptchaResponse,
+        remoteip: req.ip, // optional, can help Google detect abuse
+      },
+    });
+
+    const data = response.data;
+
+        if (data.success) {
+            //Continue With whatever
+        } else {
+        // ❌ reCAPTCHA failed
+        errors.push("You must pass the CAPTCHA")
+        }
+    } catch (error) {
+        errors.push("You must pass the CAPTCHA")
+    }
+
+    if(errors.length == 0)
+    {
     const email = req.body.email;
     const name = req.body.name;
     const ensemble = req.body.ensemble;
@@ -2044,9 +2129,53 @@ app.post("/commission", (req,res) => {
     sendEmail(toEmail,`🎉 You've Got a Commission from ${name} 🎉`,html)
 
     res.render("message-sent")
+    }
+    else
+    {
+        res.redirect("/");
+    }
 })
 
-app.post("/apply", (req,res) => {
+app.post("/apply", async (req,res) => {
+
+    const errors = []
+
+    const recaptchaResponse  = req.body['g-recaptcha-response'];
+
+
+    if(!recaptchaResponse )
+    {
+        errors.push("You must pass the CAPTCHA")
+    }
+
+    //Captcha verify
+    try {
+    // Verify with Google
+    const verifyURL = `https://www.google.com/recaptcha/api/siteverify`;
+
+    const response = await axios.post(verifyURL, null, {
+      params: {
+        secret: process.env.RECAPTCHA_SECRET_KEY,
+        response: recaptchaResponse,
+        remoteip: req.ip, // optional, can help Google detect abuse
+      },
+    });
+
+    const data = response.data;
+
+        if (data.success) {
+            //Continue With whatever
+        } else {
+        // ❌ reCAPTCHA failed
+        errors.push("You must pass the CAPTCHA")
+        }
+    } catch (error) {
+        errors.push("You must pass the CAPTCHA")
+    }
+
+    if(errors.length == 0)
+    {
+
     const email = req.body.email;
     const name = req.body.name;
     const content = req.body.content;
@@ -2177,6 +2306,11 @@ app.post("/apply", (req,res) => {
     sendEmail("chrisprice5614@gmail.com","⚠️NEW APPLICATION⚠️",html)
 
     res.render("message-sent")
+    }
+    else
+    {
+        res.redirect("/apply")
+    }
 })
 
 //Music catalogue
@@ -2711,9 +2845,43 @@ app.post("/remove-cart/:id", (req, res) => {
 })
 
 //Registering
-app.post("/register", (req, res) =>{
+app.post("/register", async (req, res) =>{
     
+
     const errors = []
+
+    const recaptchaResponse  = req.body['g-recaptcha-response'];
+
+
+    if(!recaptchaResponse )
+    {
+        errors.push("You must pass the CAPTCHA")
+    }
+
+    //Captcha verify
+    try {
+    // Verify with Google
+    const verifyURL = `https://www.google.com/recaptcha/api/siteverify`;
+
+    const response = await axios.post(verifyURL, null, {
+      params: {
+        secret: process.env.RECAPTCHA_SECRET_KEY,
+        response: recaptchaResponse,
+        remoteip: req.ip, // optional, can help Google detect abuse
+      },
+    });
+
+    const data = response.data;
+
+        if (data.success) {
+            //Continue With whatever
+        } else {
+        // ❌ reCAPTCHA failed
+        errors.push("You must pass the CAPTCHA")
+        }
+    } catch (error) {
+        errors.push("You must pass the CAPTCHA")
+    }
 
     if(typeof req.body.newsletter === "undefined")
         {

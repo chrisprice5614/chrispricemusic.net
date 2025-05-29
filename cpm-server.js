@@ -2347,6 +2347,9 @@ if (searchGrade !== 'Any Grade') {
   values.push(searchGrade);
 }
 
+conditions.push(`approved = ?`);
+values.push(1);
+
 // Sort logic
 let orderBy = 'uploadDate DESC'; // default
 switch (searchOrder) {
